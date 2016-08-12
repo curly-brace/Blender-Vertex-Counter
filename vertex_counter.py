@@ -1,9 +1,9 @@
 bl_info = {
-    "name": "Vertex Counter",
-    "author": "curly-brace",
-    "location": "Properties Panel",
-    "description": "Shows a REAL vertex count",
-    "category": "System",
+    'name': 'Vertex Counter',
+    'author': 'curly-brace',
+    'location': 'Properties Panel',
+    'description': 'Shows a REAL vertex count',
+    'category': 'System',
 }
 
 import bpy
@@ -14,12 +14,15 @@ from operator import itemgetter
 class VertexCounterPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__
 
-    active_only = BoolProperty(name="Active",
-                        description="Display info only for active object",
+    active_only = BoolProperty(name='Active',
+                        description='Display info only for active object',
                         default=True)
-    show_polys = BoolProperty(name="Polys",
-                        description="Display info about poly(tri) count",
-                        default=False)
+    show_polys = BoolProperty(name='Polys',
+                        description='Display info about poly(tri) count',
+                        default=True)
+    count_uvs = BoolProperty(name='UVs',
+                        description='Count additional vertices made by uv seams',
+                        default=True)
 
 class VertexCounter(bpy.types.Panel):
     bl_label = 'Vertex Counter'
@@ -32,8 +35,9 @@ class VertexCounter(bpy.types.Panel):
         layout = self.layout
 
         row = layout.row()
-        row.column().row().prop(prefs, "active_only")
-        row.column().row().prop(prefs, "show_polys")
+        row.column().row().prop(prefs, 'active_only')
+        row.column().row().prop(prefs, 'show_polys')
+        row.column().row().prop(prefs, 'count_uvs')
 
         row = layout.row()
         meshes = []
@@ -91,6 +95,17 @@ class VertexCounter(bpy.types.Panel):
                         flat_verts += 3
                         total_verts += 3
 
+                uv_loops = []
+
+                for uv_layer in me.uv_layers:
+                    for v in uv_layer.data.values():
+                        uv_loop = '{0},{1}'.format(*v.uv)
+                        if not uv_loop in uv_loops:
+                            uv_loops.append(uv_loop)
+
+                if prefs.count_uvs and len(uv_loops) > 0:
+                    flat_verts += len(uv_loops) - len(me.vertices)
+
                 real_verts =  len(smooth_verts) + flat_verts
                 vert_text = '{0}/{1}'.format(real_verts, total_verts)
                 poly_text = '{0}/{1}'.format(len(m.data.polygons), len(me.polygons))
@@ -105,6 +120,8 @@ class VertexCounter(bpy.types.Panel):
                     if prefs.show_polys:
                         cols[2].row().label(text=poly_text)
 
+                bpy.data.meshes.remove(me)
+
 def register():
     bpy.utils.register_class(VertexCounterPreferences)
     bpy.utils.register_class(VertexCounter)
@@ -113,5 +130,5 @@ def unregister():
     bpy.utils.unregister_class(VertexCounterPreferences)
     bpy.utils.unregister_class(VertexCounter)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     register()
