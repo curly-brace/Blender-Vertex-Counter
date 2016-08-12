@@ -3,7 +3,6 @@
 
 ####Addon to display real vertex count for models that will be used in games
 
-Displays actuall vertex count that will be used to render object by game engine, depending on normal smoothing, because game engine will split verticies that have hard edge between them.
+Displays actual vertex count that will be used to render object by game engine, depending on normal smoothing, because game engine will split verticies that have hard edge between them.
 
-##TODO
-count uv map too, because seams add verticies
+Takes into account uv-seams too, because smoothed verticies, that have seam, will be splited.
