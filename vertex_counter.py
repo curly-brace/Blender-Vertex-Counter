@@ -82,18 +82,17 @@ class VertexCounter(bpy.types.Panel):
                 me.calc_normals_split()
                 me.calc_tessface()
 
-                smooth_verts = []
-                flat_verts = 0
-                total_verts = 0
-                for p in me.polygons:
-                    if p.use_smooth:
-                        for v in p.vertices:
-                            if not v in smooth_verts:
-                                smooth_verts.append(v)
-                                total_verts += 3
-                    else:
-                        flat_verts += 3
-                        total_verts += 3
+                normals = {}
+
+                for l in me.loops:
+                    if not l.vertex_index in normals:
+                        normals[l.vertex_index] = []
+                    if not str(l.normal) in normals[l.vertex_index]:
+                        normals[l.vertex_index].append(str(l.normal))
+
+                used_verts = 0
+                for n in normals.values():
+                    used_verts += len(n)
 
                 uv_loops = []
 
@@ -104,10 +103,9 @@ class VertexCounter(bpy.types.Panel):
                             uv_loops.append(uv_loop)
 
                 if prefs.count_uvs and len(uv_loops) > 0:
-                    flat_verts += len(uv_loops) - len(me.vertices)
+                    used_verts += len(uv_loops) - len(me.vertices)
 
-                real_verts =  len(smooth_verts) + flat_verts
-                vert_text = '{0}/{1}'.format(real_verts, total_verts)
+                vert_text = '{0}/{1}'.format(used_verts, len(me.loops))
                 poly_text = '{0}/{1}'.format(len(m.data.polygons), len(me.polygons))
 
                 if prefs.active_only:
