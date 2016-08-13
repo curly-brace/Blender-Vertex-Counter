@@ -14,6 +14,10 @@ from operator import itemgetter
 class VertexCounterPreferences(bpy.types.AddonPreferences):
     bl_idname = __name__
 
+    do_calcs = BoolProperty(name='Enabled',
+                        description='Should I pause?',
+                        default=True)
+
     active_only = BoolProperty(name='Active',
                         description='Display info only for active object',
                         default=True)
@@ -35,13 +39,18 @@ class VertexCounter(bpy.types.Panel):
         layout = self.layout
 
         row = layout.row()
+        row.column().row().prop(prefs, 'do_calcs')
         row.column().row().prop(prefs, 'active_only')
+        row = layout.row()
         row.column().row().prop(prefs, 'show_polys')
         row.column().row().prop(prefs, 'count_uvs')
 
         row = layout.row()
         meshes = []
-        if prefs.active_only:
+        if not prefs.do_calcs:
+            row.label('calcs paused', icon='PAUSE')
+            return
+        elif prefs.active_only:
             if context.object is not None and context.object.type == 'MESH':
                 row.label('active object', icon='OBJECT_DATA')
                 meshes = [context.object]
