@@ -1,5 +1,5 @@
 # Blender-Vertex-Counter
-![alt tag](https://raw.githubusercontent.com/curly-brace/Blender-Vertex-Counter/master/Screenshot_20160812_121053.png)
+![alt tag](https://raw.githubusercontent.com/curly-brace/Blender-Vertex-Counter/master/Screenshot_20160814_144740.png)
 
 ####Addon to display real vertex count for models that will be used in games
 
