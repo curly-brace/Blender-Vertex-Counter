@@ -7,7 +7,8 @@ Displays actual vertex count that will be used to render object by game engine, 
 
 Takes into account uv-seams too, because smoothed verticies, that have seam, will be splited.
 
-It lags as hell on complex meshes, so there is now option do disable calcs.
+~~It lags as hell on complex meshes, so there is now option do disable calcs.~~
+Updates now happen in at max 1 second intervals. And if you see that blender freezes once a second, just switch off automatic updates and press 'Update' button when you need.
 
 ####NOTE FOR FBX EXPORT:
 Blender default exporter seems to switch full smooth shading and enable autosmooth for mesh, when default export option for smoothing - 'Normals Only' is active. The mesh appears to have less verts, because of full smooth shading, but the counter of my addon would show wrong vertex number, because mesh was modified outside of blender's 3D View and original mesh remains unchanged.
