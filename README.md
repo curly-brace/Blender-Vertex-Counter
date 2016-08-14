@@ -13,3 +13,12 @@ It lags as hell on complex meshes, so there is now option do disable calcs.
 Blender default exporter seems to switch full smooth shading and enable autosmooth for mesh, when default export option for smoothing - 'Normals Only' is active. The mesh appears to have less verts, because of full smooth shading, but the counter of my addon would show wrong vertex number, because mesh was modified outside of blender's 3D View and original mesh remains unchanged.
 
 So it is a good idea to enable smooth shading and autosmooth for the object manualy, so that the counter shows right vertex number. Seems like 50 degrees for angle property shows good results and vertex count. We are creating game models right? They will be heavily textured anyway!
+
+####What does not work:
+The calculation will fail in situations when hard edge crosses uv-seam.
+
+See this my question for details and sample.
+
+http://blender.stackexchange.com/questions/60914/how-to-determine-right-vertex-count-for-mesh
+
+For now I have no idea how to fix it.. So beware!
