@@ -191,7 +191,7 @@ class DoCalcButton(bpy.types.Operator):
         prefs = bpy.context.user_preferences.addons[__name__].preferences
         meshes = []
 
-        if prefs.active_only:
+        if prefs.active_only and context.object is not None:
             meshes = [context.object]
         else:
             meshes = [o for o in bpy.context.scene.objects if o.type == 'MESH']
